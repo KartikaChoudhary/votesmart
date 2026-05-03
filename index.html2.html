@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VoteSmart India — Election Education Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --blue:#1a4f9c;--blue2:#2563c7;--blue3:#dbeafe;--blue4:#eff6ff;
+  --ink:#111827;--ink2:#374151;--ink3:#6b7280;--ink4:#9ca3af;
+  --surface:#ffffff;--surface2:#f9fafb;--surface3:#f3f4f6;
+  --border:#e5e7eb;--border2:#d1d5db;
+  --saffron:#f97316;--green:#16a34a;--red:#dc2626;
+  --radius:10px;--radius2:16px;
+  --shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.05);
+  --shadow2:0 4px 16px rgba(0,0,0,0.08);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--surface2);color:var(--ink);min-height:100vh;}
+
+/* ── HEADER ── */
+.site-header{background:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.18);}
+.header-inner{max-width:1100px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px;}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.logo-emblem{width:42px;height:42px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.logo-emblem svg{width:26px;height:26px;}
+.logo-words{line-height:1.2;}
+.logo-title{font-size:18px;font-weight:700;color:#fff;letter-spacing:-.3px;}
+.logo-sub{font-size:11px;color:rgba(255,255,255,.65);}
+.header-right{display:flex;align-items:center;gap:10px;}
+.lang-pill{display:flex;background:rgba(255,255,255,.12);border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.2);}
+.lang-pill button{padding:5px 14px;font-size:12px;font-family:'Inter',sans-serif;border:none;background:transparent;color:rgba(255,255,255,.75);cursor:pointer;font-weight:500;}
+.lang-pill button.active{background:#fff;color:var(--blue);border-radius:20px;}
+.eci-badge{font-size:11px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:5px 14px;color:rgba(255,255,255,.8);}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#1a4f9c 0%,#1e3a7a 100%);color:#fff;padding:4rem 1.5rem 5rem;}
+.hero-inner{max-width:900px;margin:0 auto;text-align:center;}
+.hero-flag{display:flex;justify-content:center;gap:0;margin-bottom:1.5rem;}
+.flag-stripe{width:48px;height:14px;}
+.hero-eyebrow{font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:12px;}
+.hero h1{font-size:clamp(26px,5vw,42px);font-weight:700;line-height:1.2;margin-bottom:16px;letter-spacing:-.5px;}
+.hero h1 span{color:#fbbf24;}
+.hero p{font-size:16px;color:rgba(255,255,255,.75);max-width:560px;margin:0 auto 2rem;line-height:1.7;}
+.hero-stats{display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap;}
+.hero-stat{text-align:center;}
+.hero-stat-num{font-size:28px;font-weight:700;color:#fbbf24;}
+.hero-stat-label{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;}
+
+/* ── NAV TABS ── */
+.nav-bar{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow);}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 1.5rem;display:flex;overflow-x:auto;scrollbar-width:none;}
+.nav-inner::-webkit-scrollbar{display:none;}
+.nav-tab{flex-shrink:0;display:flex;align-items:center;gap:7px;padding:16px 20px;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;border:none;background:transparent;cursor:pointer;color:var(--ink3);border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;}
+.nav-tab .tab-icon{font-size:15px;}
+.nav-tab:hover{color:var(--ink);}
+.nav-tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:600;}
+
+/* ── MAIN ── */
+.main{max-width:960px;margin:0 auto;padding:2rem 1.5rem 5rem;}
+.tab-pane{display:none;animation:fadeIn .2s ease;}
+.tab-pane.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+/* ── CARDS ── */
+.card{background:#fff;border-radius:var(--radius2);border:1px solid var(--border);padding:1.5rem;margin-bottom:1.25rem;box-shadow:var(--shadow);}
+.card-title{font-size:15px;font-weight:600;margin-bottom:4px;}
+.card-sub{font-size:13px;color:var(--ink3);line-height:1.6;}
+.section-head{margin-bottom:1.25rem;}
+.section-head h2{font-size:20px;font-weight:700;letter-spacing:-.3px;}
+.section-head p{font-size:13px;color:var(--ink3);margin-top:4px;}
+
+/* ── ISSUE CHIPS ── */
+.chip-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:20px;font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;border:1.5px solid var(--border2);background:#fff;color:var(--ink2);transition:all .15s;font-weight:400;}
+.chip:hover{border-color:var(--blue2);color:var(--blue2);}
+.chip.sel{background:var(--blue4);color:var(--blue2);border-color:var(--blue2);font-weight:500;}
+
+/* ── PARTY CHECKS ── */
+.party-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.pty{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:8px;border:1.5px solid var(--border2);background:#fff;cursor:pointer;font-size:13px;font-weight:500;user-select:none;transition:all .15s;}
+.pty input{display:none;}
+.pty.sel{border-color:var(--blue2);background:var(--blue4);color:var(--blue);}
+.pty-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+/* ── ELECTION TYPE TABS ── */
+.etype-row{display:flex;gap:8px;flex-wrap:wrap;}
+.etype-btn{padding:8px 20px;border-radius:8px;border:1.5px solid var(--border2);background:#fff;font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;color:var(--ink3);transition:all .15s;}
+.etype-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:500;}
+
+/* ── BUTTONS ── */
+.btn-primary{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 28px;border-radius:10px;background:var(--blue);color:#fff;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;border:none;cursor:pointer;transition:all .15s;width:100%;margin-top:8px;}
+.btn-primary:hover{background:var(--blue2);}
+.btn-primary:disabled{background:var(--ink4);cursor:not-allowed;}
+.btn-outline{padding:7px 18px;border-radius:8px;border:1px solid var(--border2);background:#fff;font-size:12px;font-family:'Inter',sans-serif;cursor:pointer;color:var(--ink2);}
+
+/* ── LOADING ── */
+.loading-box{display:none;text-align:center;padding:3rem 1rem;}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── COMPARE RESULTS ── */
+.results-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:1rem;}
+.results-bar h3{font-size:16px;font-weight:600;}
+.results-bar p{font-size:12px;color:var(--ink3);margin-top:2px;}
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:1rem;}
+.pty-card{background:#fff;border-radius:var(--radius2);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow);}
+.pty-card-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.pty-card-name{font-size:14px;font-weight:600;}
+.pty-card-body{padding:4px 16px 8px;}
+.issue-block{padding:10px 0;border-bottom:1px solid var(--border);}
+.issue-block:last-child{border-bottom:none;}
+.issue-label{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--ink4);margin-bottom:5px;}
+.issue-bullets{padding-left:15px;list-style:disc;}
+.issue-bullets li{font-size:12.5px;color:var(--ink2);line-height:1.6;margin-bottom:3px;}
+.disclaimer-note{font-size:11px;color:var(--ink4);text-align:center;padding:12px;border-top:1px solid var(--border);}
+.followup-bar{display:flex;gap:8px;margin-top:10px;}
+.followup-inp{flex:1;padding:10px 14px;border-radius:8px;border:1px solid var(--border2);font-size:13px;font-family:'Inter',sans-serif;outline:none;}
+.followup-inp:focus{border-color:var(--blue2);}
+.followup-send{padding:10px 18px;border-radius:8px;background:var(--blue);color:#fff;border:none;font-size:13px;font-weight:500;cursor:pointer;}
+.followup-ans{margin-top:10px;padding:14px;background:var(--surface3);border-radius:10px;font-size:13px;line-height:1.7;display:none;}
+
+/* ── TIMELINE ── */
+.timeline-section{margin-bottom:2rem;}
+.tl-intro{background:linear-gradient(135deg,var(--blue4),#fff);border:1px solid #bfdbfe;border-radius:var(--radius2);padding:1.25rem 1.5rem;margin-bottom:1.5rem;}
+.tl-intro p{font-size:13px;color:var(--ink2);line-height:1.7;}
+.tl-intro strong{color:var(--blue);}
+
+.timeline{position:relative;padding:0 0 0 52px;}
+.timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--blue),var(--blue3),var(--border));}
+
+.tl-item{position:relative;margin-bottom:2rem;opacity:0;transform:translateX(-10px);transition:opacity .4s ease,transform .4s ease;}
+.tl-item.visible{opacity:1;transform:none;}
+.tl-node{position:absolute;left:-42px;top:2px;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;border:2px solid var(--blue3);background:#fff;box-shadow:0 0 0 4px var(--blue4);z-index:1;}
+.tl-item.phase-done .tl-node{background:var(--blue);border-color:var(--blue);box-shadow:0 0 0 4px var(--blue3);}
+.tl-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;padding:3px 10px;border-radius:12px;margin-bottom:6px;}
+.tl-badge.govt{background:#fef9c3;color:#854d0e;}
+.tl-badge.eci{background:var(--blue4);color:var(--blue);}
+.tl-badge.party{background:#fce7f3;color:#9d174d;}
+.tl-badge.voter{background:#dcfce7;color:#166534;}
+.tl-badge.count{background:#f3e8ff;color:#7e22ce;}
+.tl-title{font-size:15px;font-weight:600;margin-bottom:4px;}
+.tl-duration{font-size:11px;color:var(--ink4);margin-bottom:8px;font-weight:500;}
+.tl-bullets{list-style:none;padding:0;}
+.tl-bullets li{font-size:13px;color:var(--ink2);line-height:1.6;padding:3px 0 3px 18px;position:relative;}
+.tl-bullets li::before{content:'→';position:absolute;left:0;color:var(--blue);font-size:11px;top:5px;}
+.tl-bullets li.hi{font-family:'Noto Sans Devanagari',sans-serif;font-size:13px;}
+.tl-expand{font-size:12px;color:var(--blue);cursor:pointer;margin-top:6px;display:inline-block;font-weight:500;}
+
+.phase-card{background:#fff;border-radius:var(--radius2);border:1px solid var(--border);padding:1.25rem 1.25rem 1.25rem 1.5rem;box-shadow:var(--shadow);}
+.phase-card.highlight{border-left:3px solid var(--blue);}
+
+/* ── HOW TO VOTE ── */
+.htv-progress{display:flex;gap:4px;margin-bottom:1.5rem;flex-wrap:nowrap;overflow-x:auto;}
+.htv-step-btn{flex:1;min-width:70px;text-align:center;padding:10px 6px;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:11px;font-weight:500;cursor:pointer;color:var(--ink3);transition:all .15s;font-family:'Inter',sans-serif;}
+.htv-step-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.htv-step-btn.done{background:var(--blue4);color:var(--blue);border-color:var(--blue2);}
+.htv-panels .panel{display:none;}
+.htv-panels .panel.active{display:block;}
+.htv-nav{display:flex;gap:10px;margin-top:1rem;}
+.htv-nav button{flex:1;padding:11px;border-radius:8px;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;border:1px solid var(--border2);background:#fff;color:var(--ink2);}
+.htv-nav .next-btn{background:var(--blue);color:#fff;border-color:var(--blue);}
+.step-visual{font-size:48px;text-align:center;margin:1rem 0;}
+.step-title{font-size:17px;font-weight:700;margin-bottom:4px;}
+.step-tagline{font-size:13px;color:var(--ink3);margin-bottom:1rem;}
+.step-list{list-style:none;padding:0;}
+.step-list li{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--ink2);line-height:1.6;}
+.step-list li:last-child{border-bottom:none;}
+.step-list li .bullet-num{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-info-box{background:var(--blue4);border:1px solid #bfdbfe;border-radius:10px;padding:12px 16px;margin-top:12px;font-size:13px;color:var(--blue);line-height:1.6;}
+
+/* ── MYTHS ── */
+.myth-item{background:#fff;border-radius:var(--radius2);border:1px solid var(--border);margin-bottom:10px;overflow:hidden;box-shadow:var(--shadow);}
+.myth-q{padding:14px 16px;font-size:14px;font-weight:500;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;transition:background .15s;}
+.myth-q:hover{background:var(--surface2);}
+.myth-verdict{font-size:10px;font-weight:700;letter-spacing:.5px;padding:4px 12px;border-radius:12px;flex-shrink:0;text-transform:uppercase;}
+.v-false{background:#fee2e2;color:var(--red);}
+.v-true{background:#dcfce7;color:var(--green);}
+.v-partial{background:#fef9c3;color:#92400e;}
+.myth-body{display:none;padding:0 16px 14px;border-top:1px solid var(--border);}
+.myth-body.open{display:block;}
+.myth-body ul{padding-left:16px;margin-top:10px;}
+.myth-body li{font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:4px;}
+
+/* ── REGISTER ── */
+.helpline-box{background:var(--blue);color:#fff;border-radius:var(--radius2);padding:1.5rem;margin-bottom:1.25rem;text-align:center;}
+.helpline-num{font-size:44px;font-weight:700;letter-spacing:-1px;}
+.helpline-label{font-size:14px;color:rgba(255,255,255,.75);margin-top:4px;}
+.reg-steps{counter-reset:reg;}
+.reg-row{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start;}
+.reg-row:last-child{border-bottom:none;}
+.reg-num{width:32px;height:32px;border-radius:50%;background:var(--blue);color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.reg-title{font-size:14px;font-weight:600;margin-bottom:4px;}
+.reg-desc{font-size:13px;color:var(--ink2);line-height:1.6;}
+.links-card{background:var(--blue4);border:1px solid #bfdbfe;border-radius:var(--radius2);padding:1.25rem;margin-top:1rem;}
+.links-card h4{font-size:13px;font-weight:600;color:var(--blue);margin-bottom:10px;}
+.links-card ul{list-style:none;padding:0;}
+.links-card li{padding:6px 0;border-bottom:1px solid #bfdbfe;font-size:13px;}
+.links-card li:last-child{border-bottom:none;}
+.links-card a{color:var(--blue2);text-decoration:none;font-weight:500;}
+.links-card a:hover{text-decoration:underline;}
+
+/* ── CONSTITUENCY ── */
+.pin-row{display:flex;gap:8px;margin-bottom:8px;}
+.pin-inp{flex:1;padding:12px 16px;border-radius:8px;border:1.5px solid var(--border2);font-size:14px;font-family:'Inter',sans-serif;outline:none;}
+.pin-inp:focus{border-color:var(--blue2);}
+.pin-btn{padding:12px 22px;border-radius:8px;background:var(--blue);color:#fff;border:none;font-size:14px;font-weight:500;cursor:pointer;}
+.const-card{display:none;background:#fff;border-radius:var(--radius2);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow);}
+.const-head{background:linear-gradient(135deg,var(--blue),#1e3a7a);color:#fff;padding:1.25rem 1.5rem;}
+.const-head h3{font-size:18px;font-weight:700;}
+.const-head p{font-size:12px;color:rgba(255,255,255,.65);margin-top:3px;}
+.const-body{padding:0 1.5rem;}
+.const-row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.const-row:last-child{border-bottom:none;}
+.const-lbl{color:var(--ink3);}
+.const-val{font-weight:500;text-align:right;max-width:60%;}
+.report-section{padding:1.25rem 1.5rem;border-top:1px solid var(--border);}
+.report-section h4{font-size:13px;font-weight:600;margin-bottom:10px;color:var(--ink);}
+.report-bullets{list-style:disc;padding-left:16px;}
+.report-bullets li{font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:4px;}
+
+/* ── FOOTER ── */
+footer{background:var(--blue);color:rgba(255,255,255,.6);text-align:center;padding:2rem;font-size:12px;line-height:1.8;}
+footer strong{color:#fff;}
+
+@media(max-width:640px){
+  .hero{padding:2.5rem 1rem 3.5rem;}
+  .hero-stats{gap:1.5rem;}
+  .main{padding:1rem 1rem 4rem;}
+  .compare-grid{grid-template-columns:1fr;}
+  .htv-step-btn{font-size:10px;padding:8px 4px;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-emblem">
+        <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="13" cy="13" r="12" stroke="#1a4f9c" stroke-width="1.5"/>
+          <circle cx="13" cy="13" r="4" fill="#1a4f9c"/>
+          <line x1="13" y1="1" x2="13" y2="5" stroke="#1a4f9c" stroke-width="1.5"/>
+          <line x1="13" y1="21" x2="13" y2="25" stroke="#1a4f9c" stroke-width="1.5"/>
+          <line x1="1" y1="13" x2="5" y2="13" stroke="#1a4f9c" stroke-width="1.5"/>
+          <line x1="21" y1="13" x2="25" y2="13" stroke="#1a4f9c" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="logo-words">
+        <div class="logo-title">VoteSmart India</div>
+        <div class="logo-sub">Election Education Platform</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="lang-pill">
+        <button class="active" id="gl-en" onclick="setGlobalLang('en')">EN</button>
+        <button id="gl-hi" onclick="setGlobalLang('hi')" style="font-family:'Noto Sans Devanagari',sans-serif;">हिंदी</button>
+      </div>
+      <span class="eci-badge">ECI Informed</span>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-flag">
+      <div class="flag-stripe" style="background:#f97316;border-radius:4px 0 0 4px;"></div>
+      <div class="flag-stripe" style="background:#fff;display:flex;align-items:center;justify-content:center;">
+        <div style="width:10px;height:10px;border-radius:50%;border:1.5px solid #1a4f9c;"></div>
+      </div>
+      <div class="flag-stripe" style="background:#16a34a;border-radius:0 4px 4px 0;"></div>
+    </div>
+    <div class="hero-eyebrow" data-en="Civic Education for Every Indian" data-hi="हर भारतीय के लिए नागरिक शिक्षा">Civic Education for Every Indian</div>
+    <h1 data-en="Understand Elections.<br><span>Vote with Confidence.</span>" data-hi="चुनाव को समझें।<br><span>आत्मविश्वास से मतदान करें।</span>">Understand Elections.<br><span>Vote with Confidence.</span></h1>
+    <p data-en="From Election Commission announcement to government formation — learn every step of India's democratic process in simple language." data-hi="चुनाव आयोग की घोषणा से लेकर सरकार बनने तक — भारत की लोकतांत्रिक प्रक्रिया का हर चरण सरल भाषा में समझें।">From Election Commission announcement to government formation — learn every step of India's democratic process in simple language.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-num">96.8 Cr</div><div class="hero-stat-label">Registered Voters</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">10.5 L</div><div class="hero-stat-label">Polling Booths</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">543</div><div class="hero-stat-label">Lok Sabha Seats</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">1950</div><div class="hero-stat-label">Voter Helpline</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NAV -->
+<nav class="nav-bar">
+  <div class="nav-inner">
+    <button class="nav-tab active" onclick="goTab('timeline',this)"><span class="tab-icon">📅</span> Election Timeline</button>
+    <button class="nav-tab" onclick="goTab('howtovote',this)"><span class="tab-icon">🗳️</span> How to Vote</button>
+    <button class="nav-tab" onclick="goTab('compare',this)"><span class="tab-icon">⚖️</span> Compare Parties</button>
+    <button class="nav-tab" onclick="goTab('constituency',this)"><span class="tab-icon">📍</span> My Constituency</button>
+    <button class="nav-tab" onclick="goTab('register',this)"><span class="tab-icon">✅</span> Register & Myths</button>
+  </div>
+</nav>
+
+<main class="main">
+
+<!-- ═══════════════════ TIMELINE ═══════════════════ -->
+<div id="tab-timeline" class="tab-pane active">
+  <div class="section-head">
+    <h2 data-en="The Election Journey" data-hi="चुनाव की यात्रा">The Election Journey</h2>
+    <p data-en="Every Indian election follows this official process — from the first announcement to the oath ceremony." data-hi="हर भारतीय चुनाव इस आधिकारिक प्रक्रिया का पालन करता है — पहली घोषणा से शपथ समारोह तक।">Every Indian election follows this official process — from the first announcement to the oath ceremony.</p>
+  </div>
+
+  <div class="tl-intro">
+    <p data-en="The <strong>Election Commission of India (ECI)</strong> is an independent constitutional body that conducts all elections. It operates without government interference and its decisions are binding on all parties and candidates." data-hi="<strong>भारत निर्वाचन आयोग (ECI)</strong> एक स्वतंत्र संवैधानिक निकाय है जो सभी चुनाव आयोजित करता है। यह सरकारी हस्तक्षेप के बिना काम करता है।">The <strong>Election Commission of India (ECI)</strong> is an independent constitutional body that conducts all elections. It operates without government interference and its decisions are binding on all parties and candidates.</p>
+  </div>
+
+  <div class="timeline" id="tl-root">
+
+    <div class="tl-item phase-done">
+      <div class="tl-node">📢</div>
+      <div class="phase-card highlight">
+        <span class="tl-badge eci">ECI Announces</span>
+        <div class="tl-title" data-en="Election Announcement & Schedule" data-hi="चुनाव की घोषणा और कार्यक्रम">Election Announcement & Schedule</div>
+        <div class="tl-duration" data-en="Day 0 — The starting gun" data-hi="दिन 0 — शुरुआत">Day 0 — The starting gun</div>
+        <ul class="tl-bullets">
+          <li data-en="Chief Election Commissioner holds a press conference to announce election dates" data-hi="मुख्य चुनाव आयुक्त चुनाव तिथियों की घोषणा के लिए प्रेस कॉन्फ्रेंस करते हैं">Chief Election Commissioner holds a press conference to announce election dates</li>
+          <li data-en="Multiple phase dates are declared — India often has 5-7 voting phases for Lok Sabha" data-hi="कई चरणों की तिथियां घोषित की जाती हैं — लोकसभा के लिए अक्सर 5-7 मतदान चरण होते हैं">Multiple phase dates are declared — India often has 5-7 voting phases for Lok Sabha</li>
+          <li data-en="Model Code of Conduct (MCC) kicks in immediately from this moment" data-hi="आदर्श आचार संहिता (MCC) इसी क्षण से तुरंत लागू हो जाती है">Model Code of Conduct (MCC) kicks in immediately from this moment</li>
+        </ul>
+        <span class="tl-expand" onclick="this.parentElement.querySelector('.tl-extra').classList.toggle('hide')" style="display:none"></span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-node">📜</div>
+      <div class="phase-card">
+        <span class="tl-badge govt">Model Code of Conduct</span>
+        <div class="tl-title" data-en="MCC — Rules Everyone Must Follow" data-hi="MCC — वे नियम जो सभी को मानने होंगे">MCC — Rules Everyone Must Follow</div>
+        <div class="tl-duration" data-en="Active from announcement until results" data-hi="घोषणा से परिणाम तक सक्रिय">Active from announcement until results</div>
+        <ul class="tl-bullets">
+          <li data-en="Government cannot announce new schemes, launch projects, or make transfers of key officials" data-hi="सरकार नई योजनाएं नहीं बना सकती, परियोजनाएं शुरू नहीं कर सकती या प्रमुख अधिकारियों का तबादला नहीं कर सकती">Government cannot announce new schemes, launch projects, or transfer key officials</li>
+          <li data-en="Parties cannot use government vehicles, buildings, or resources for campaigning" data-hi="पार्टियां प्रचार के लिए सरकारी वाहनों, इमारतों या संसाधनों का उपयोग नहीं कर सकतीं">Parties cannot use government vehicles, buildings, or resources for campaigning</li>
+          <li data-en="No communal or caste-based vote appeals are allowed" data-hi="सांप्रदायिक या जाति-आधारित वोट अपील की अनुमति नहीं है">No communal or caste-based vote appeals are allowed</li>
+          <li data-en="Any violation can be reported to ECI — they can censure or disqualify candidates" data-hi="किसी भी उल्लंघन की सूचना ECI को दी जा सकती है — वे उम्मीदवारों को फटकार लगा सकते हैं या अयोग्य घोषित कर सकते हैं">Any violation can be reported to ECI — they can censure or disqualify candidates</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-node">📋</div>
+      <div class="phase-card">
+        <span class="tl-badge eci">ECI Process</span>
+        <div class="tl-title" data-en="Notification & Candidate Nominations" data-hi="अधिसूचना और उम्मीदवार नामांकन">Notification & Candidate Nominations</div>
+        <div class="tl-duration" data-en="~4 weeks before voting" data-hi="मतदान से ~4 सप्ताह पहले">~4 weeks before voting</div>
+        <ul class="tl-bullets">
+          <li data-en="Official gazette notification issued for each constituency — election process formally begins" data-hi="प्रत्येक निर्वाचन क्षेत्र के लिए आधिकारिक राजपत्र अधिसूचना जारी की जाती है">Official gazette notification issued for each constituency — election process formally begins</li>
+          <li data-en="Candidates file nomination papers with Returning Officer, pay security deposit (₹25,000 for Lok Sabha)" data-hi="उम्मीदवार रिटर्निंग ऑफिसर के पास नामांकन पत्र दाखिल करते हैं, जमानत राशि जमा करते हैं">Candidates file nomination papers with Returning Officer, pay security deposit</li>
+          <li data-en="Criminal records and assets of ALL candidates are made public on ECI website" data-hi="सभी उम्मीदवारों के आपराधिक रिकॉर्ड और संपत्ति ECI वेबसाइट पर सार्वजनिक की जाती है">Criminal records and assets of ALL candidates are made public on ECI website</li>
+          <li data-en="Scrutiny of nominations by Returning Officer — invalid ones are rejected" data-hi="रिटर्निंग ऑफिसर द्वारा नामांकन की जांच — अमान्य को अस्वीकार किया जाता है">Scrutiny of nominations — invalid ones are rejected</li>
+          <li data-en="Last date for withdrawal — candidates can pull out, final list published" data-hi="वापसी की अंतिम तिथि — उम्मीदवार हट सकते हैं, अंतिम सूची प्रकाशित होती है">Last date for withdrawal — candidates can pull out, final list published</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-node">📣</div>
+      <div class="phase-card">
+        <span class="tl-badge party">Parties & Candidates</span>
+        <div class="tl-title" data-en="Election Campaign Period" data-hi="चुनाव प्रचार अवधि">Election Campaign Period</div>
+        <div class="tl-duration" data-en="~3 weeks before voting" data-hi="मतदान से ~3 सप्ताह पहले">~3 weeks before voting</div>
+        <ul class="tl-bullets">
+          <li data-en="Parties hold rallies, door-to-door campaigns, distribute manifestos" data-hi="पार्टियां रैलियां करती हैं, घर-घर प्रचार करती हैं, घोषणापत्र वितरित करती हैं">Parties hold rallies, door-to-door campaigns, distribute manifestos</li>
+          <li data-en="Each candidate has a spending limit (₹95 lakh for Lok Sabha) — exceeding it is a criminal offence" data-hi="प्रत्येक उम्मीदवार की खर्च सीमा होती है — इसे पार करना आपराधिक अपराध है">Each candidate has a spending limit — exceeding it is a criminal offence</li>
+          <li data-en="Campaigning must STOP 48 hours before voting — called the Silent Period" data-hi="मतदान से 48 घंटे पहले प्रचार बंद होना चाहिए — इसे शांत काल कहते हैं">Campaigning must STOP 48 hours before voting — called the Silent Period</li>
+          <li data-en="No exit polls can be published until the last phase of voting ends" data-hi="अंतिम चरण का मतदान समाप्त होने तक कोई एग्जिट पोल प्रकाशित नहीं किया जा सकता">No exit polls can be published until the last phase of voting ends</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-node">🗳️</div>
+      <div class="phase-card highlight">
+        <span class="tl-badge voter">Voting Day</span>
+        <div class="tl-title" data-en="Polling Day — Democracy in Action" data-hi="मतदान दिवस — लोकतंत्र की क्रिया">Polling Day — Democracy in Action</div>
+        <div class="tl-duration" data-en="7 AM to 6 PM (varies by state)" data-hi="सुबह 7 बजे से शाम 6 बजे तक (राज्य के अनुसार अलग)">7 AM to 6 PM (varies by state)</div>
+        <ul class="tl-bullets">
+          <li data-en="Voters go to their assigned polling booth with valid ID" data-hi="मतदाता वैध पहचान पत्र के साथ अपने निर्धारित मतदान केंद्र पर जाते हैं">Voters go to their assigned polling booth with valid ID</li>
+          <li data-en="Name verified in voter roll → indelible ink on finger → vote on EVM" data-hi="मतदाता सूची में नाम सत्यापन → उंगली पर अमिट स्याही → EVM पर मतदान">Name verified → indelible ink on finger → vote on EVM</li>
+          <li data-en="VVPAT shows a paper slip of your vote for 7 seconds — you can verify it" data-hi="VVPAT 7 सेकंड के लिए आपके वोट की पर्ची दिखाती है — आप इसे सत्यापित कर सकते हैं">VVPAT shows a paper slip of your vote for 7 seconds — verify it</li>
+          <li data-en="Central Armed Police Forces (CAPF) deployed for security at booths" data-hi="बूथों पर सुरक्षा के लिए केंद्रीय सशस्त्र पुलिस बलों (CAPF) की तैनाती">Central Armed Police Forces deployed for security at booths</li>
+          <li data-en="EVMs are sealed and stored securely — candidates can post their own seal too" data-hi="EVM को सुरक्षित रूप से सील और संग्रहित किया जाता है — उम्मीदवार भी अपनी सील लगा सकते हैं">EVMs are sealed and stored securely under multi-party supervision</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-node">🔢</div>
+      <div class="phase-card">
+        <span class="tl-badge count">Counting</span>
+        <div class="tl-title" data-en="Counting Day & Results" data-hi="मतगणना दिवस और परिणाम">Counting Day & Results</div>
+        <div class="tl-duration" data-en="1–2 weeks after last voting phase" data-hi="अंतिम मतदान चरण के 1-2 सप्ताह बाद">1–2 weeks after last voting phase</div>
+        <ul class="tl-bullets">
+          <li data-en="EVMs brought to counting centres, opened in presence of candidates' agents" data-hi="उम्मीदवारों के एजेंटों की उपस्थिति में EVM को गिनती केंद्रों में लाया जाता है">EVMs brought to counting centres, opened in presence of candidates' agents</li>
+          <li data-en="Counting happens round by round — each round counts one table of EVMs" data-hi="गिनती दौर दर दौर होती है — प्रत्येक दौर में EVMs की एक टेबल की गिनती होती है">Counting happens round by round — each round counts one table of EVMs</li>
+          <li data-en="First Past the Post — candidate with highest votes wins, even without majority" data-hi="फर्स्ट पास्ट द पोस्ट — सबसे अधिक वोट पाने वाला उम्मीदवार जीतता है, बहुमत के बिना भी">First Past the Post — candidate with highest votes wins the seat</li>
+          <li data-en="For Lok Sabha: party/alliance needing 272+ seats to claim majority and form government" data-hi="लोकसभा के लिए: सरकार बनाने के लिए 272+ सीटें चाहिए">For Lok Sabha: 272+ seats needed to claim majority and form government</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-node">🏛️</div>
+      <div class="phase-card">
+        <span class="tl-badge govt">Government Formation</span>
+        <div class="tl-title" data-en="Government Formation & Oath" data-hi="सरकार गठन और शपथ">Government Formation & Oath</div>
+        <div class="tl-duration" data-en="Within 2–4 weeks of results" data-hi="परिणामों के 2-4 सप्ताह के भीतर">Within 2–4 weeks of results</div>
+        <ul class="tl-bullets">
+          <li data-en="Winning party/coalition leader is invited by President to form government" data-hi="राष्ट्रपति विजेता दल/गठबंधन के नेता को सरकार बनाने के लिए आमंत्रित करते हैं">Winning party/coalition leader invited by President to form government</li>
+          <li data-en="Prime Minister takes oath at Rashtrapati Bhavan — then selects Cabinet ministers" data-hi="प्रधानमंत्री राष्ट्रपति भवन में शपथ लेते हैं — फिर कैबिनेट मंत्रियों का चयन करते हैं">Prime Minister takes oath at Rashtrapati Bhavan, then selects Cabinet</li>
+          <li data-en="If no single party wins majority, coalition negotiations begin — can take days/weeks" data-hi="यदि कोई एकल पार्टी बहुमत नहीं जीतती, तो गठबंधन वार्ता शुरू होती है">If no majority: coalition negotiations begin — can take days or weeks</li>
+          <li data-en="Floor test in Lok Sabha proves the government has the numbers to survive" data-hi="लोकसभा में फ्लोर टेस्ट साबित करता है कि सरकार के पास बहुमत है">Floor test in Lok Sabha proves the government has the numbers to survive</li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+</div>
+
+<!-- ═══════════════════ HOW TO VOTE ═══════════════════ -->
+<div id="tab-howtovote" class="tab-pane">
+  <div class="section-head">
+    <h2 data-en="How to Vote — Step by Step" data-hi="मतदान कैसे करें — चरण दर चरण">How to Vote — Step by Step</h2>
+    <p data-en="Follow each step to vote successfully on election day." data-hi="चुनाव दिवस पर सफलतापूर्वक मतदान करने के लिए हर चरण का पालन करें।">Follow each step to vote successfully on election day.</p>
+  </div>
+
+  <div class="card">
+    <div class="htv-progress" id="htv-progress">
+      <button class="htv-step-btn active" onclick="goHtv(0)">1. Before</button>
+      <button class="htv-step-btn" onclick="goHtv(1)">2. Check In</button>
+      <button class="htv-step-btn" onclick="goHtv(2)">3. Queue</button>
+      <button class="htv-step-btn" onclick="goHtv(3)">4. EVM</button>
+      <button class="htv-step-btn" onclick="goHtv(4)">5. VVPAT</button>
+      <button class="htv-step-btn" onclick="goHtv(5)">6. Done!</button>
+    </div>
+
+    <div class="htv-panels">
+      <div class="panel active" id="htv-0">
+        <div class="step-visual">📋</div>
+        <div class="step-title" data-en="Before Election Day" data-hi="चुनाव दिवस से पहले">Before Election Day</div>
+        <div class="step-tagline" data-en="Prepare these things 1–2 days in advance" data-hi="1-2 दिन पहले ये चीजें तैयार करें">Prepare these things 1–2 days in advance</div>
+        <ul class="step-list">
+          <li><span class="bullet-num">1</span><span data-en="Check your name at <strong>voters.eci.gov.in</strong> or call <strong>1950</strong> (free)" data-hi="<strong>voters.eci.gov.in</strong> पर अपना नाम जांचें या <strong>1950</strong> पर कॉल करें (मुफ्त)">Check your name at <strong>voters.eci.gov.in</strong> or call <strong>1950</strong> (free)</span></li>
+          <li><span class="bullet-num">2</span><span data-en="Note your polling booth address — it is printed on your Voter ID or available on the ECI website" data-hi="अपने मतदान केंद्र का पता नोट करें — यह आपके मतदाता पहचान पत्र पर या ECI वेबसाइट पर उपलब्ध है">Note your polling booth address from your Voter ID or ECI website</span></li>
+          <li><span class="bullet-num">3</span><span data-en="Keep valid ID ready: Voter ID, Aadhaar, Passport, PAN, Driving Licence all work" data-hi="वैध पहचान पत्र तैयार रखें: मतदाता पहचान पत्र, आधार, पासपोर्ट, पैन, ड्राइविंग लाइसेंस सभी काम करते हैं">Keep valid ID ready: Voter ID, Aadhaar, Passport, PAN, Driving Licence</span></li>
+          <li><span class="bullet-num">4</span><span data-en="Voting is from 7 AM – 6 PM. Plan to go early to avoid long queues" data-hi="मतदान सुबह 7 बजे से शाम 6 बजे तक होता है। लंबी कतारों से बचने के लिए जल्दी जाने की योजना बनाएं">Voting is 7 AM – 6 PM. Go early to avoid long queues</span></li>
+        </ul>
+        <div class="step-info-box" data-en="💡 Tip: Download the <strong>Voter Helpline App</strong> from Play Store. You can check registration, find your booth, and download your e-EPIC (digital Voter ID) — all in one place." data-hi="💡 टिप: Play Store से <strong>Voter Helpline App</strong> डाउनलोड करें। आप पंजीकरण जांच सकते हैं, बूथ खोज सकते हैं और अपना e-EPIC डाउनलोड कर सकते हैं।">💡 Tip: Download the <strong>Voter Helpline App</strong> from Play Store. Check registration, find your booth, and download your e-EPIC digital Voter ID — all in one place.</div>
+      </div>
+
+      <div class="panel" id="htv-1">
+        <div class="step-visual">🏫</div>
+        <div class="step-title" data-en="Arrive at Your Polling Booth" data-hi="अपने मतदान केंद्र पर पहुंचें">Arrive at Your Polling Booth</div>
+        <div class="step-tagline" data-en="Make sure you are at the RIGHT booth — your address is on your Voter ID" data-hi="सुनिश्चित करें कि आप सही बूथ पर हैं — आपका पता आपके मतदाता पहचान पत्र पर है">Make sure you are at the RIGHT booth</div>
+        <ul class="step-list">
+          <li><span class="bullet-num">1</span><span data-en="Polling booths are usually at local schools, community halls, or government buildings" data-hi="मतदान केंद्र आमतौर पर स्थानीय स्कूलों, सामुदायिक हॉलों या सरकारी इमारतों में होते हैं">Booths are usually at schools, community halls, or govt buildings</span></li>
+          <li><span class="bullet-num">2</span><span data-en="Do NOT bring your mobile phone into the voting compartment — leave it outside or in your pocket" data-hi="मतदान कक्ष में अपना मोबाइल फोन न लाएं — इसे बाहर या अपनी जेब में छोड़ें">Do NOT take phone inside the voting compartment</span></li>
+          <li><span class="bullet-num">3</span><span data-en="Separate queues exist for men, women, and senior citizens / PwD voters" data-hi="पुरुषों, महिलाओं और वरिष्ठ नागरिकों / विकलांग मतदाताओं के लिए अलग कतारें होती हैं">Separate queues for men, women, and senior/disabled voters</span></li>
+          <li><span class="bullet-num">4</span><span data-en="Senior citizens (80+) and PwD voters can request home voting — apply in advance at ECI" data-hi="वरिष्ठ नागरिक (80+) और विकलांग मतदाता घर से मतदान का अनुरोध कर सकते हैं">Senior citizens (80+) and PwD can apply for home voting</span></li>
+        </ul>
+      </div>
+
+      <div class="panel" id="htv-2">
+        <div class="step-visual">✍️</div>
+        <div class="step-title" data-en="Verification & Ink Mark" data-hi="सत्यापन और स्याही का निशान">Verification & Ink Mark</div>
+        <div class="step-tagline" data-en="This step proves you are a registered voter" data-hi="यह कदम साबित करता है कि आप एक पंजीकृत मतदाता हैं">This step proves you are a registered voter</div>
+        <ul class="step-list">
+          <li><span class="bullet-num">1</span><span data-en="Show your ID to the Presiding Officer at the first table — they find your name in the voter roll" data-hi="पहली टेबल पर पीठासीन अधिकारी को अपना पहचान पत्र दिखाएं — वे मतदाता सूची में आपका नाम खोजते हैं">Show ID to Presiding Officer — they find you in the voter roll</span></li>
+          <li><span class="bullet-num">2</span><span data-en="You sign or put your thumb impression in Register 17A — this records that you voted" data-hi="आप रजिस्टर 17A में हस्ताक्षर करते हैं या अंगूठे का निशान लगाते हैं — यह दर्ज करता है कि आपने मतदान किया">Sign or thumb-print in Register 17A — records that you voted</span></li>
+          <li><span class="bullet-num">3</span><span data-en="Indelible blue-black ink is applied to your LEFT index finger — this cannot be washed off for days" data-hi="आपकी बाईं तर्जनी पर अमिट नीली-काली स्याही लगाई जाती है — यह कई दिनों तक नहीं धुलती">Indelible ink applied to LEFT index finger — won't wash off for days</span></li>
+          <li><span class="bullet-num">4</span><span data-en="You receive a voter slip — take this to the EVM officer inside the booth" data-hi="आपको एक मतदाता पर्ची मिलती है — इसे बूथ के अंदर EVM अधिकारी को दें">You receive a voter slip — take it to the EVM officer inside</span></li>
+        </ul>
+        <div class="step-info-box" data-en="ℹ️ If your name is on the list but you are refused, write a complaint to the Presiding Officer immediately. You have the right to complain on Form 49MA." data-hi="ℹ️ यदि आपका नाम सूची में है लेकिन आपको मना किया जाता है, तो तुरंत पीठासीन अधिकारी को शिकायत लिखें। आपको Form 49MA पर शिकायत करने का अधिकार है।">ℹ️ If your name is on the list but you are refused, complain to the Presiding Officer on Form 49MA. You have the legal right to vote.</div>
+      </div>
+
+      <div class="panel" id="htv-3">
+        <div class="step-visual">🖲️</div>
+        <div class="step-title" data-en="Voting on the EVM" data-hi="EVM पर मतदान">Voting on the EVM</div>
+        <div class="step-tagline" data-en="EVM = Electronic Voting Machine. Simple, secure, one press." data-hi="EVM = इलेक्ट्रॉनिक वोटिंग मशीन। सरल, सुरक्षित, एक दबाव।">EVM = Electronic Voting Machine. Simple, secure, one press.</div>
+        <ul class="step-list">
+          <li><span class="bullet-num">1</span><span data-en="The EVM Balloting Unit shows all candidate names with party symbols and serial numbers" data-hi="EVM बैलेटिंग यूनिट सभी उम्मीदवारों के नाम, पार्टी चिन्ह और क्रम संख्या दिखाती है">EVM shows all candidate names with party symbols and serial numbers</span></li>
+          <li><span class="bullet-num">2</span><span data-en="Press the BLUE button next to your chosen candidate's name" data-hi="अपने चुने हुए उम्मीदवार के नाम के बगल में नीला बटन दबाएं">Press the BLUE button next to your chosen candidate</span></li>
+          <li><span class="bullet-num">3</span><span data-en="A beep sound confirms your vote has been recorded — only ONE vote possible per EVM" data-hi="एक बीप की आवाज पुष्टि करती है कि आपका वोट दर्ज हो गया — प्रति EVM केवल एक वोट संभव है">A beep confirms your vote is recorded — only ONE vote per voter</span></li>
+          <li><span class="bullet-num">4</span><span data-en="NOTA (None of the Above) is always the last option if you don't want to vote for anyone" data-hi="NOTA (उपरोक्त में से कोई नहीं) हमेशा अंतिम विकल्प होता है यदि आप किसी को वोट नहीं देना चाहते">NOTA is the last option if you reject all candidates</span></li>
+        </ul>
+        <div class="step-info-box" data-en="🔒 EVMs have no internet, WiFi, or Bluetooth. They cannot be hacked remotely. The Supreme Court of India has upheld EVM integrity multiple times." data-hi="🔒 EVM में कोई इंटरनेट, WiFi या Bluetooth नहीं है। इन्हें दूर से हैक नहीं किया जा सकता। भारत के सर्वोच्च न्यायालय ने कई बार EVM की विश्वसनीयता को बरकरार रखा है।">🔒 EVMs have no internet, WiFi, or Bluetooth. Remote hacking is impossible. The Supreme Court has upheld EVM integrity multiple times.</div>
+      </div>
+
+      <div class="panel" id="htv-4">
+        <div class="step-visual">🧾</div>
+        <div class="step-title" data-en="VVPAT — Verify Your Vote" data-hi="VVPAT — अपना वोट सत्यापित करें">VVPAT — Verify Your Vote</div>
+        <div class="step-tagline" data-en="VVPAT = Voter Verified Paper Audit Trail" data-hi="VVPAT = मतदाता सत्यापित कागज लेखा परीक्षण पथ">VVPAT = Voter Verified Paper Audit Trail</div>
+        <ul class="step-list">
+          <li><span class="bullet-num">1</span><span data-en="After you press the EVM button, a small paper slip prints in the VVPAT machine next to the EVM" data-hi="EVM बटन दबाने के बाद, EVM के बगल में VVPAT मशीन में एक छोटी पर्ची छपती है">After pressing EVM, a paper slip prints in the VVPAT glass box</span></li>
+          <li><span class="bullet-num">2</span><span data-en="The slip shows the candidate's name, party name, and party symbol — visible for 7 seconds" data-hi="पर्ची पर उम्मीदवार का नाम, पार्टी का नाम और पार्टी चिन्ह दिखता है — 7 सेकंड के लिए दृश्यमान">Slip shows candidate name, party name, and symbol — visible for 7 seconds</span></li>
+          <li><span class="bullet-num">3</span><span data-en="The slip then drops automatically into a sealed box — you cannot take it out" data-hi="पर्ची फिर स्वचालित रूप से एक सीलबंद बॉक्स में गिर जाती है — आप इसे नहीं निकाल सकते">Slip automatically drops into sealed box — you cannot remove it</span></li>
+          <li><span class="bullet-num">4</span><span data-en="If slip doesn't match, you can raise a challenge with the Presiding Officer — they will check" data-hi="यदि पर्ची मेल नहीं खाती, तो आप पीठासीन अधिकारी के साथ चुनौती उठा सकते हैं">If slip doesn't match what you voted, raise it with Presiding Officer</span></li>
+        </ul>
+      </div>
+
+      <div class="panel" id="htv-5">
+        <div class="step-visual">🎉</div>
+        <div class="step-title" data-en="You Have Voted!" data-hi="आपने मतदान कर लिया!">You Have Voted!</div>
+        <div class="step-tagline" data-en="You have done your democratic duty. Here's what happens next." data-hi="आपने अपना लोकतांत्रिक कर्तव्य निभाया। अब आगे क्या होता है।">You have done your democratic duty. Here's what happens next.</div>
+        <ul class="step-list">
+          <li><span class="bullet-num">✓</span><span data-en="The ink on your finger is proof you voted — it stays for 3–5 days" data-hi="आपकी उंगली पर स्याही इस बात का प्रमाण है कि आपने मतदान किया — यह 3-5 दिन रहती है">The ink on your finger proves you voted — stays for 3–5 days</span></li>
+          <li><span class="bullet-num">✓</span><span data-en="EVMs are sealed by Presiding Officer, signed by polling agents of all candidates" data-hi="EVM को पीठासीन अधिकारी द्वारा सील किया जाता है, सभी उम्मीदवारों के मतदान एजेंटों द्वारा हस्ताक्षरित">EVMs sealed and signed by polling agents of all parties</span></li>
+          <li><span class="bullet-num">✓</span><span data-en="EVMs are kept in secure strong rooms with CCTV and armed guards until counting day" data-hi="EVM को गिनती दिवस तक CCTV और सशस्त्र गार्ड के साथ सुरक्षित स्ट्रांग रूम में रखा जाता है">EVMs stored in strong rooms with CCTV and armed guards until counting</span></li>
+          <li><span class="bullet-num">✓</span><span data-en="Results are announced on counting day — follow ECI website or DD News for live updates" data-hi="परिणाम गिनती दिवस पर घोषित किए जाते हैं — लाइव अपडेट के लिए ECI वेबसाइट या DD News देखें">Results announced on counting day — follow ECI website for live updates</span></li>
+        </ul>
+        <div class="step-info-box" data-en="🇮🇳 Thank you for voting! Your vote decides who represents your constituency in Parliament or the State Assembly for the next 5 years." data-hi="🇮🇳 मतदान करने के लिए धन्यवाद! आपका वोट तय करता है कि अगले 5 साल तक संसद या राज्य विधानसभा में आपके निर्वाचन क्षेत्र का प्रतिनिधित्व कौन करेगा।">🇮🇳 Your vote decides who represents your constituency in Parliament for the next 5 years.</div>
+      </div>
+    </div>
+
+    <div class="htv-nav">
+      <button onclick="prevHtv()" id="htv-prev" style="display:none;">← Previous</button>
+      <button class="next-btn" onclick="nextHtv()" id="htv-next">Next Step →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ COMPARE ═══════════════════ -->
+<div id="tab-compare" class="tab-pane">
+  <div class="section-head">
+    <h2 data-en="Compare Parties on Your Issues" data-hi="अपने मुद्दों पर पार्टियों की तुलना करें">Compare Parties on Your Issues</h2>
+    <p data-en="Start with what matters to you — not with parties. See their positions in simple bullet points." data-hi="जो आपको मायने रखता है उससे शुरू करें — पार्टियों से नहीं। सरल बुलेट बिंदुओं में उनकी स्थिति देखें।">Start with what matters to you — not with parties.</p>
+  </div>
+
+  <div id="cmp-form">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:12px;">Step 1 — Select your issues</div>
+      <div class="chip-grid" id="issue-picker">
+        <button class="chip" data-issue="Jobs & Employment" onclick="toggleIssue(this)">💼 Jobs & Employment</button>
+        <button class="chip" data-issue="Roads & Infrastructure" onclick="toggleIssue(this)">🛣️ Roads & Infrastructure</button>
+        <button class="chip" data-issue="Water & Sanitation" onclick="toggleIssue(this)">💧 Water & Sanitation</button>
+        <button class="chip" data-issue="Healthcare" onclick="toggleIssue(this)">🏥 Healthcare</button>
+        <button class="chip" data-issue="Education" onclick="toggleIssue(this)">📚 Education</button>
+        <button class="chip" data-issue="Electricity" onclick="toggleIssue(this)">⚡ Electricity</button>
+        <button class="chip" data-issue="Farmers & MSP" onclick="toggleIssue(this)">🌾 Farmers & MSP</button>
+        <button class="chip" data-issue="Women Safety" onclick="toggleIssue(this)">🛡️ Women Safety</button>
+        <button class="chip" data-issue="Prices & Inflation" onclick="toggleIssue(this)">📈 Prices & Inflation</button>
+        <button class="chip" data-issue="Corruption" onclick="toggleIssue(this)">⚖️ Corruption</button>
+        <button class="chip" data-issue="Reservation & Social Justice" onclick="toggleIssue(this)">🤝 Reservation</button>
+        <button class="chip" data-issue="Environment" onclick="toggleIssue(this)">🌱 Environment</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:12px;">Step 2 — Pick parties to compare</div>
+      <div class="party-grid">
+        <label class="pty sel" id="lbl-bjp" onclick="togglePty(this,'bjp')"><input type="checkbox" id="p-bjp" checked><span class="pty-dot" style="background:#FF671F"></span>BJP</label>
+        <label class="pty sel" id="lbl-inc" onclick="togglePty(this,'inc')"><input type="checkbox" id="p-inc" checked><span class="pty-dot" style="background:#138808"></span>INC</label>
+        <label class="pty" id="lbl-aap" onclick="togglePty(this,'aap')"><input type="checkbox" id="p-aap"><span class="pty-dot" style="background:#0073CF"></span>AAP</label>
+        <label class="pty" id="lbl-sp" onclick="togglePty(this,'sp')"><input type="checkbox" id="p-sp"><span class="pty-dot" style="background:#D82323"></span>SP</label>
+        <label class="pty" id="lbl-tmc" onclick="togglePty(this,'tmc')"><input type="checkbox" id="p-tmc"><span class="pty-dot" style="background:#2E8B57"></span>TMC</label>
+        <label class="pty" id="lbl-bsp" onclick="togglePty(this,'bsp')"><input type="checkbox" id="p-bsp"><span class="pty-dot" style="background:#1a1a2e"></span>BSP</label>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:12px;">Step 3 — Election type</div>
+      <div class="etype-row">
+        <button class="etype-btn active" onclick="setEtype(this,'Lok Sabha (National)')">🇮🇳 Lok Sabha</button>
+        <button class="etype-btn" onclick="setEtype(this,'State / Vidhan Sabha')">🏛️ State / Vidhan Sabha</button>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="doCompare()">Compare on My Issues →</button>
+  </div>
+
+  <div class="loading-box" id="cmp-loading">
+    <div class="spinner"></div>
+    <p style="font-size:14px;color:var(--ink3);">Fetching party positions…</p>
+  </div>
+
+  <div id="cmp-results" style="display:none;">
+    <div class="results-bar">
+      <div><h3 data-en="Comparison Result" data-hi="तुलना परिणाम">Comparison Result</h3><p id="cmp-meta"></p></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <div class="lang-pill" style="background:var(--border);border-color:var(--border2);">
+          <button style="color:var(--ink3);" class="active" id="cl-en" onclick="setCmpLang('en')">EN</button>
+          <button style="color:var(--ink3);font-family:'Noto Sans Devanagari',sans-serif;" id="cl-hi" onclick="setCmpLang('hi')">हिंदी</button>
+        </div>
+        <button class="btn-outline" onclick="resetCmp()">← Start Over</button>
+      </div>
+    </div>
+    <div class="compare-grid" id="cmp-cards"></div>
+    <div class="disclaimer-note">⚠️ For educational purposes only. Based on party manifestos & public statements. VoteSmart does not endorse any party.</div>
+    <div style="margin-top:10px;">
+      <div class="followup-bar">
+        <input class="followup-inp" id="fup-inp" placeholder="Ask a follow-up question about these parties…" onkeydown="if(event.key==='Enter')doFollowup()">
+        <button class="followup-send" onclick="doFollowup()">Ask</button>
+      </div>
+      <div class="followup-ans" id="fup-ans"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ CONSTITUENCY ═══════════════════ -->
+<div id="tab-constituency" class="tab-pane">
+  <div class="section-head">
+    <h2 data-en="Know Your Constituency" data-hi="अपना निर्वाचन क्षेत्र जानें">Know Your Constituency</h2>
+    <p data-en="Enter your pincode to find your MP, MLA, and constituency report card." data-hi="अपना सांसद, विधायक और निर्वाचन क्षेत्र रिपोर्ट कार्ड खोजने के लिए अपना पिनकोड दर्ज करें।">Enter your pincode to find your MP, MLA, and constituency report card.</p>
+  </div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:12px;">Enter your 6-digit Pincode</div>
+    <div class="pin-row">
+      <input class="pin-inp" id="pin-inp" placeholder="e.g. 452001" maxlength="6" type="number" onkeydown="if(event.key==='Enter')doPin()">
+      <button class="pin-btn" onclick="doPin()">Search →</button>
+    </div>
+    <p style="font-size:12px;color:var(--ink4);">Your pincode is used only to identify your constituency. No data stored.</p>
+  </div>
+  <div class="loading-box" id="pin-loading"><div class="spinner"></div><p style="font-size:14px;color:var(--ink3);">Looking up your constituency…</p></div>
+  <div class="const-card" id="pin-result">
+    <div class="const-head"><h3 id="pin-city">—</h3><p id="pin-state">—</p></div>
+    <div class="const-body">
+      <div class="const-row"><span class="const-lbl">Lok Sabha Constituency</span><span class="const-val" id="pin-ls">—</span></div>
+      <div class="const-row"><span class="const-lbl">Sitting MP (2024)</span><span class="const-val" id="pin-mp">—</span></div>
+      <div class="const-row"><span class="const-lbl">MP's Party</span><span class="const-val" id="pin-mpp">—</span></div>
+      <div class="const-row"><span class="const-lbl">Vidhan Sabha Constituency</span><span class="const-val" id="pin-vs">—</span></div>
+      <div class="const-row"><span class="const-lbl">Sitting MLA</span><span class="const-val" id="pin-mla">—</span></div>
+      <div class="const-row"><span class="const-lbl">MLA's Party</span><span class="const-val" id="pin-mlap">—</span></div>
+    </div>
+    <div class="report-section"><h4>📊 Constituency Report Card</h4><ul class="report-bullets" id="pin-report"></ul></div>
+  </div>
+  <div class="card" style="background:var(--blue4);border-color:#bfdbfe;margin-top:1rem;">
+    <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:10px;">🔗 Verify via Official Sources</div>
+    <ul style="list-style:none;font-size:13px;color:var(--ink2);line-height:2.2;">
+      <li><a href="https://voters.eci.gov.in" target="_blank" style="color:var(--blue2);font-weight:500;">voters.eci.gov.in</a> — Official voter search & registration</li>
+      <li><a href="https://www.myneta.info" target="_blank" style="color:var(--blue2);font-weight:500;">myneta.info</a> — Candidate criminal records & assets</li>
+      <li><a href="https://loksabha.nic.in" target="_blank" style="color:var(--blue2);font-weight:500;">loksabha.nic.in</a> — MP attendance & questions raised</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════ REGISTER & MYTHS ═══════════════════ -->
+<div id="tab-register" class="tab-pane">
+  <div class="section-head">
+    <h2 data-en="Voter Registration & Common Myths" data-hi="मतदाता पंजीकरण और सामान्य मिथक">Voter Registration & Common Myths</h2>
+  </div>
+
+  <div class="helpline-box">
+    <div class="helpline-num">📞 1950</div>
+    <div class="helpline-label">National Voter Helpline — Free call, all languages, 8 AM–8 PM</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="margin-bottom:1rem;">✅ How to Register as a Voter</div>
+    <div class="reg-steps">
+      <div class="reg-row"><div class="reg-num">1</div><div><div class="reg-title">Check if you're already registered</div><div class="reg-desc">Go to <strong>voters.eci.gov.in</strong> → Search by name + date of birth + state. If found, you're registered. If not, continue.</div></div></div>
+      <div class="reg-row"><div class="reg-num">2</div><div><div class="reg-title">Fill Form 6 online (new voters)</div><div class="reg-desc">Visit voters.eci.gov.in → New Registration → Form 6. You need: Aadhaar number, address proof, photo. Takes 5 minutes.</div></div></div>
+      <div class="reg-row"><div class="reg-num">3</div><div><div class="reg-title">Download the Voter Helpline App</div><div class="reg-desc">Search "Voter Helpline" on Play Store or App Store. Register, track application, download e-EPIC digital Voter ID — all in one app.</div></div></div>
+      <div class="reg-row"><div class="reg-num">4</div><div><div class="reg-title">Wait for verification (7–30 days)</div><div class="reg-desc">A Booth Level Officer (BLO) may visit your address. You'll get SMS confirmation when approved.</div></div></div>
+      <div class="reg-row"><div class="reg-num">5</div><div><div class="reg-title">Who is eligible?</div><div class="reg-desc">Indian citizen, 18+ years old, resident of the area you're registering in. NRIs can register via Form 6A at the Indian Embassy.</div></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="margin-bottom:1rem;">🔍 Election Myths vs Facts — Tap to reveal</div>
+    <div class="myth-item">
+      <div class="myth-q" onclick="this.nextSibling.classList.toggle('open')"><span>"EVM machines can be hacked or tampered remotely"</span><span class="myth-verdict v-false">FALSE</span></div>
+      <div class="myth-body"><ul><li>EVMs are standalone — zero internet, WiFi, or Bluetooth connectivity</li><li>Remote hacking is physically impossible — no signal receiver exists inside</li><li>VVPAT paper trail enables physical verification of any disputed vote</li><li>Supreme Court has upheld EVM integrity multiple times after independent audits</li></ul></div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-q" onclick="this.nextSibling.classList.toggle('open')"><span>"My single vote doesn't make a difference"</span><span class="myth-verdict v-false">FALSE</span></div>
+      <div class="myth-body"><ul><li>In 2019, 15 Lok Sabha seats were won by margins under 1,000 votes</li><li>Several UP 2022 assembly seats were decided by fewer than 500 votes</li><li>Urban low-turnout lets smaller groups decide outcomes — your absence matters</li><li>Your vote is 1-in-1.5 lakh in a constituency, not 1-in-96-crore</li></ul></div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-q" onclick="this.nextSibling.classList.toggle('open')"><span>"You MUST have Voter ID card to vote — nothing else works"</span><span class="myth-verdict v-false">FALSE</span></div>
+      <div class="myth-body"><ul><li>ECI accepts 12 alternative photo ID documents</li><li>Aadhaar, Passport, PAN, Driving Licence, MNREGA card all accepted</li><li>Bank passbook with photo, pension documents also valid</li><li>Your name must be on voter list — ID is only for identity proof at booth</li></ul></div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-q" onclick="this.nextSibling.classList.toggle('open')"><span>"NOTA votes go to the winning party"</span><span class="myth-verdict v-false">FALSE</span></div>
+      <div class="myth-body"><ul><li>NOTA (None of the Above) is a valid choice on the EVM — last button</li><li>NOTA votes are counted separately and do NOT transfer to any candidate</li><li>Even if NOTA gets most votes, candidate with highest actual votes wins</li><li>NOTA is a formal way to register dissatisfaction with all candidates</li></ul></div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-q" onclick="this.nextSibling.classList.toggle('open')"><span>"Voting is compulsory — you can be fined for not voting"</span><span class="myth-verdict v-false">FALSE</span></div>
+      <div class="myth-body"><ul><li>Voting is NOT compulsory in India at the national or state level</li><li>No fine or legal penalty exists for not voting in general elections</li><li>Gujarat has compulsory local body voting with some exceptions — not national</li></ul></div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-q" onclick="this.nextSibling.classList.toggle('open')"><span>"Booth capturing still decides elections today"</span><span class="myth-verdict v-partial">LARGELY FALSE TODAY</span></div>
+      <div class="myth-body"><ul><li>Booth capturing was serious in 1970s–80s but EVMs made mass stuffing nearly impossible</li><li>EVM can only record one vote every 5 seconds — rapid stuffing is physically blocked</li><li>Vote buying still happens — report it on 1950 or CVigil app with photo/video</li><li>CAPF deployment and webcasting of booths has drastically reduced incidents</li></ul></div>
+    </div>
+  </div>
+
+  <div class="links-card">
+    <h4>📱 Useful Official Apps & Links</h4>
+    <ul>
+      <li><a href="https://voters.eci.gov.in" target="_blank">voters.eci.gov.in</a> — Register, check roll, find booth</li>
+      <li><a href="https://play.google.com/store/apps/details?id=com.eci.citizen" target="_blank">Voter Helpline App</a> — Download e-EPIC, track application</li>
+      <li><a href="https://cvigil.eci.gov.in" target="_blank">CVigil App</a> — Report MCC violations with photo/video</li>
+      <li><a href="https://www.myneta.info" target="_blank">MyNeta.info</a> — Check candidate criminal records & assets</li>
+    </ul>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <strong>VoteSmart India</strong> — Built for #BuildwithAI #PromptWarsVirtual · Challenge 2: Election Process Education<br>
+  @googlefordevelopers @hack2skill · Data: Election Commission of India, MyNeta, PRS Legislative Research<br>
+  <span style="color:rgba(255,255,255,.4);font-size:11px;">For educational purposes only. Not affiliated with ECI or any political party.</span>
+</footer>
+
+<script>
+const WORKER_URL = 'https://dry-forest-8236.kartikachoudhary6.workers.dev';
+
+// ════ GLOBAL LANG ════
+let globalLang = 'en';
+function setGlobalLang(lang) {
+  globalLang = lang;
+  document.getElementById('gl-en').classList.toggle('active', lang==='en');
+  document.getElementById('gl-hi').classList.toggle('active', lang==='hi');
+  const isHi = lang === 'hi';
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.innerHTML = isHi ? el.dataset.hi : el.dataset.en;
+    el.style.fontFamily = isHi ? "'Noto Sans Devanagari',sans-serif" : "'Inter',sans-serif";
+  });
+  // also apply to step list items
+  document.querySelectorAll('.step-list span[data-en], .step-info-box[data-en]').forEach(el => {
+    el.innerHTML = isHi ? el.dataset.hi : el.dataset.en;
+    el.style.fontFamily = isHi ? "'Noto Sans Devanagari',sans-serif" : "'Inter',sans-serif";
+  });
+}
+
+// ════ TAB SWITCHING ════
+function goTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='timeline') animateTl();
+}
+
+// ════ TIMELINE ANIMATION ════
+function animateTl() {
+  const items = document.querySelectorAll('.tl-item');
+  items.forEach((item, i) => {
+    setTimeout(() => item.classList.add('visible'), i * 180);
+  });
+}
+setTimeout(animateTl, 300);
+
+// ════ HOW TO VOTE ════
+let htvStep = 0;
+const htvTotal = 6;
+function goHtv(n) {
+  document.querySelectorAll('.htv-panels .panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('htv-'+n).classList.add('active');
+  const btns = document.querySelectorAll('.htv-step-btn');
+  btns.forEach((b,i)=>{ b.classList.remove('active','done'); if(i<n)b.classList.add('done'); if(i===n)b.classList.add('active'); });
+  htvStep = n;
+  document.getElementById('htv-prev').style.display = n===0?'none':'block';
+  document.getElementById('htv-next').textContent = n===htvTotal-1 ? '✓ Finished!' : 'Next Step →';
+  if(n===htvTotal-1) document.getElementById('htv-next').style.background='var(--green)';
+  else document.getElementById('htv-next').style.background='var(--blue)';
+}
+function nextHtv(){ if(htvStep<htvTotal-1)goHtv(htvStep+1); }
+function prevHtv(){ if(htvStep>0)goHtv(htvStep-1); }
+
+// ════ COMPARE ════
+const selIssues = new Set();
+let eType = 'Lok Sabha (National)';
+const pMap = {bjp:{name:'BJP',color:'#FF671F'},inc:{name:'INC (Congress)',color:'#138808'},aap:{name:'AAP',color:'#0073CF'},sp:{name:'Samajwadi Party',color:'#D82323'},tmc:{name:'TMC',color:'#2E8B57'},bsp:{name:'BSP',color:'#1a1a2e'}};
+function toggleIssue(btn){const i=btn.dataset.issue;selIssues.has(i)?(selIssues.delete(i),btn.classList.remove('sel')):(selIssues.add(i),btn.classList.add('sel'));}
+function togglePty(lbl,id){const cb=document.getElementById('p-'+id);cb.checked=!cb.checked;lbl.classList.toggle('sel',cb.checked);}
+function setEtype(btn,t){eType=t;document.querySelectorAll('.etype-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function getParties(){return Object.entries(pMap).filter(([k])=>document.getElementById('p-'+k)?.checked).map(([,v])=>v.name);}
+
+async function doCompare(){
+  if(!selIssues.size){alert('Select at least one issue.');return;}
+  const parties=getParties();
+  if(!parties.length){alert('Select at least one party.');return;}
+  document.getElementById('cmp-form').style.display='none';
+  document.getElementById('cmp-loading').style.display='block';
+  const issues=[...selIssues].join(', ');
+  const prompt=`You are a neutral, factual election education assistant for India.
+Compare these parties: ${parties.join(', ')} on issues: ${issues}. Election: ${eType}.
+For each party, for each issue: give exactly 2-3 short bullet points (one sentence each) about their position, promise, or record. Also give Hindi Devanagari translation of each bullet.
+Be completely neutral. Respond ONLY as valid JSON, no markdown:
+{"parties":[{"name":"","issues":[{"issue":"","bullets_en":["","",""],"bullets_hi":["","",""]}]}]}`;
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:2500,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    const txt=data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
+    const parsed=JSON.parse(txt);
+    document.getElementById('cmp-loading').style.display='none';
+    document.getElementById('cmp-meta').textContent=`Issues: ${issues} · ${eType}`;
+    window._cCtx={data:parsed,issues,eType};window._cLang='en';
+    buildCmpCards('en');
+    document.getElementById('cmp-results').style.display='block';
+  }catch(e){
+    document.getElementById('cmp-loading').style.display='none';
+    document.getElementById('cmp-form').style.display='block';
+    alert('Something went wrong. Please try again.');
+  }
+}
+
+function setCmpLang(lang){
+  window._cLang=lang;
+  document.getElementById('cl-en').classList.toggle('active',lang==='en');
+  document.getElementById('cl-hi').classList.toggle('active',lang==='hi');
+  buildCmpCards(lang);
+}
+
+function buildCmpCards(lang){
+  const{data}=window._cCtx; const row=document.getElementById('cmp-cards'); row.innerHTML='';
+  const isHi=lang==='hi';
+  data.parties.forEach(p=>{
+    const meta=Object.values(pMap).find(x=>x.name===p.name)||{color:'#888'};
+    const card=document.createElement('div'); card.className='pty-card';
+    let html=`<div class="pty-card-head"><div class="pty-dot" style="background:${meta.color}"></div><div class="pty-card-name" style="font-family:${isHi?"'Noto Sans Devanagari',sans-serif":"'Inter',sans-serif"}">${p.name}</div></div><div class="pty-card-body">`;
+    p.issues.forEach(item=>{
+      const bullets=isHi?(item.bullets_hi||item.bullets_en):item.bullets_en;
+      const bHtml=(bullets||[]).map(b=>`<li style="font-family:${isHi?"'Noto Sans Devanagari',sans-serif":"'Inter',sans-serif"};font-size:${isHi?'13px':'12px'}">${b}</li>`).join('');
+      html+=`<div class="issue-block"><div class="issue-label">${item.issue}</div><ul class="issue-bullets">${bHtml}</ul></div>`;
+    });
+    html+='</div>'; card.innerHTML=html; row.appendChild(card);
+  });
+}
+
+async function doFollowup(){
+  const inp=document.getElementById('fup-inp'); const q=inp.value.trim(); if(!q)return;
+  const ans=document.getElementById('fup-ans'); ans.style.display='block'; ans.textContent='Thinking…'; inp.disabled=true;
+  const ctx=window._cCtx;
+  const sys=`Neutral India election assistant. User compared ${ctx.data.parties.map(p=>p.name).join(', ')} on ${ctx.issues} (${ctx.eType}). Answer in 3-5 simple sentences. Stay neutral and factual.`;
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:500,system:sys,messages:[{role:'user',content:q}]})});
+    const data=await res.json();
+    ans.textContent=data.content.map(b=>b.text||'').join('');
+  }catch{ans.textContent='Could not fetch. Please try again.';}
+  inp.disabled=false;
+}
+
+function resetCmp(){
+  selIssues.clear();
+  document.querySelectorAll('.chip').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('cmp-results').style.display='none';
+  document.getElementById('cmp-form').style.display='block';
+  document.getElementById('cmp-cards').innerHTML='';
+  document.getElementById('fup-ans').style.display='none';
+}
+
+// ════ CONSTITUENCY ════
+async function doPin(){
+  const pin=document.getElementById('pin-inp').value.trim();
+  if(pin.length!==6){alert('Enter a valid 6-digit pincode.');return;}
+  document.getElementById('pin-loading').style.display='block';
+  document.getElementById('pin-result').style.display='none';
+  const prompt=`For Indian pincode ${pin}, provide city, state, Lok Sabha constituency name, sitting MP (2024 election) and party, Vidhan Sabha constituency, sitting MLA and party, and 3-4 bullet points about this constituency's development/issues/representative performance. Use web search for accurate 2024 data. If unsure say so.
+Respond ONLY as JSON, no markdown: {"city":"","state":"","ls":"","mp":"","mpp":"","vs":"","mla":"","mlap":"","report":["",""]}`;
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:800,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    const txt=data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
+    const d=JSON.parse(txt);
+    document.getElementById('pin-city').textContent=d.city||'Unknown';
+    document.getElementById('pin-state').textContent=d.state||'';
+    document.getElementById('pin-ls').textContent=d.ls||'Not found';
+    document.getElementById('pin-mp').textContent=d.mp||'Not found';
+    document.getElementById('pin-mpp').textContent=d.mpp||'—';
+    document.getElementById('pin-vs').textContent=d.vs||'Not found';
+    document.getElementById('pin-mla').textContent=d.mla||'Not found';
+    document.getElementById('pin-mlap').textContent=d.mlap||'—';
+    const ul=document.getElementById('pin-report'); ul.innerHTML='';
+    (d.report||[]).forEach(b=>{const li=document.createElement('li');li.textContent=b;ul.appendChild(li);});
+    document.getElementById('pin-result').style.display='block';
+  }catch(e){alert('Could not fetch data. Please try again.');}
+  document.getElementById('pin-loading').style.display='none';
+}
+</script>
+</body>
+</html>
